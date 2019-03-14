@@ -42,11 +42,11 @@ describe('Update users from the db', () => {
         assertName(User.findByIdAndUpdate(god._id, {name: 'Fabin Santos'}))(done);  
     });
 
-    it('A User can update its postCount by 1', (done) => {
-        User.update({ name: 'DeusTrick'}, {$inc: { postCount: 1 }})
+    it('A User can update its likes by 1', (done) => {
+        User.update({ name: 'DeusTrick'}, {$inc: { likes: 1 }})
             .then(() => User.findOne({ name: 'DeusTrick' }))
             .then(user => {
-                assert(user.postCount === 1);
+                assert(user.likes === 1);
                 done();
             })
     });
