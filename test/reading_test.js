@@ -3,12 +3,20 @@ const User = require('../src/user');
 
 describe('Reading users from the db', () => {
 
-    let god;
+    let god, godOfFire, godOfRuble, godOfIce;
 
     beforeEach((done) => {
+        godOfFire = new User({ name: 'Ace' });
         god = new User({ name: 'DeusTrick'});
-        god.save()
-            .then(() => done());
+        godOfRuble = new User({ name: 'Luffy' });
+        godOfIce = new User({ name: 'Ryuma' });
+        Promise.all([
+            god.save(),
+            godOfFire.save(),
+            godOfRuble.save(),
+            godOfIce.save(),
+        ])
+        .then(() => done());
     });
 
     it('find all users with name.. DeusTrick', (done) => {
@@ -25,5 +33,18 @@ describe('Reading users from the db', () => {
                 assert(user.name === 'DeusTrick');
                 done();
             } );
-    })
+    });
+
+    it('can skip and limit the result set', (done) => {
+        User.find({})
+            .sort({ name: 1 })
+            .skip(1)
+            .limit(2)
+            .then(users => {
+                assert(users.length == 2);
+                assert(users[0].name === 'DeusTrick');
+                assert(users[1].name === 'Luffy');
+                done();
+            });
+    });
 });
